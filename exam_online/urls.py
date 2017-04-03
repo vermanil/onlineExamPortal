@@ -5,6 +5,6 @@ urlpatterns = [
     url(r'^$', views.index, name="index"),
     url(r'^accounts/(?P<name>[\S]+)/login$', views.candidateLogin, name="candidateLogin"),
     url(r'^accounts/(?P<name>[\S]+)/register$', views.candidateRegister, name="candidateRegister"),
-    url(r'^exam$', views.exam, name="exam"),
+    url(r'^(?P<name>[\S]+)/exam$', views.exam, name="exam"),
     url(r'^accounts/(?P<name>[\S]+)/logout$', views.Clogout, name="logout"),
 ]

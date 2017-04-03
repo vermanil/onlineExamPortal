@@ -16,7 +16,10 @@ def candidateLogin(request, name):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect("/exam")
+            # print(name)
+            url = "/" + name + "/exam"
+            # print(url)
+            return HttpResponseRedirect(url)
         else:
             url = "/accounts/" + name + "/login"
             return HttpResponseRedirect(url)
@@ -70,5 +73,9 @@ def candidateRegister(request,name):
         return render(request, "reg.html", {'form': form, "name": name})
 
 @login_required(login_url='/')
-def exam(request):
-    return render(request,'exam.html',{})
+def exam(request, name):
+    # print(name)
+    if name == "Institue":
+        return render(request,'institutePortal.html',{'name':name})
+    else:
+        return render(request, 'candidatePortal.html', {'name': name})

@@ -1,0 +1,19 @@
+{% extends 'home.html' %}
+{% block content %}
+              <div class="row">
+        <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 25%">
+    {% if name == "Institute" %}
+    <h1>{{ name }}</h1>
+    <p>
+    <ol><a href="/Institute/exam">Introduction</a></ol>
+    <ol><a href="">Set paper option</a></ol>
+    <ol><a href="">Candidate Scores</a></ol>
+        <ol><a href={{ "/accounts/" }}{{ name }}{{ "/logout" }}>Logout</a></ol>
+    </p>
+        {% endif %}
+          </div>
+          <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%">
+        <p>Welcome to Institute side portal</p>
+          </div>
+          </div>
+{% endblock %}

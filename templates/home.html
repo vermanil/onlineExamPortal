@@ -17,10 +17,21 @@
    </div>
 <div class="container-fluid">
       {% block content %}
+          <div class="row">
+        <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 25%">
+            <a href="/">Introduction</a><br>
 <a href="/accounts/Candidate/login">Candidate Login</a></br>
 <a href="/accounts/Candidate/register">Candidate Register</a> </br>
           <a href="/accounts/Institute/login">Institute Login</a></br>
 <a href="/accounts/Institute/register">Institute Register</a>
+          </div>
+          <div class="col-sm-6 col-lg-6 col-md-6 imgcntr" style="width: 70%">
+        <p>Welcome to online exam portal. It have two portal.
+            <h3>1: Candidate</h3> It can give exam and see leaderboard.
+              <h3>2 :Institute.</h3>
+              It can set the paper option for the candidate</p>
+          </div>
+          </div>
       {% endblock %}
 </div>
 </div>
