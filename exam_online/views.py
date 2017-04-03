@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import candidateLoginForm, RegistrationForm, InstituteLoginForm, InstituteRegistrationForm
+from .forms import candidateLoginForm, RegistrationForm, InstituteLoginForm, InstituteRegistrationForm, examDetails
 
 # Create your views here.
 def index(request):
@@ -15,11 +15,25 @@ def candidateLogin(request, name):
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
-            login(request, user)
-            # print(name)
-            url = "/" + name + "/exam"
-            # print(url)
-            return HttpResponseRedirect(url)
+            print(user.is_staff)
+            if name == "Institute":
+                login(request, user)
+                # print(name)
+                url = "/" + name + "/exam"
+                # print(url)
+                return HttpResponseRedirect(url)
+            else:
+                url = "/accounts/" + name + "/login"
+                return HttpResponseRedirect(url)
+            if name == "Candidate":
+                login(request, user)
+                # print(name)
+                url = "/" + name + "/exam"
+                # print(url)
+                return HttpResponseRedirect(url)
+            else:
+                url = "/accounts/" + name + "/login"
+                return HttpResponseRedirect(url)
         else:
             url = "/accounts/" + name + "/login"
             return HttpResponseRedirect(url)
@@ -50,17 +64,23 @@ def candidateRegister(request,name):
             form = InstituteRegistrationForm(request.POST)
         # print(form.is_valid())
         if form.is_valid():  # invoke .is_valid
-            user = User.objects.create_user(
-                username=form.cleaned_data['username'],
-                email=form.cleaned_data['email'],
-                password=form.cleaned_data['password']
-            )
-            if name == "candidate":
+            if name == "Candidate":
+                user = User.objects.create_user(
+                    username=form.cleaned_data['username'],
+                    email=form.cleaned_data['email'],
+                    password=form.cleaned_data['password']
+                )
                 user.first_name = form.cleaned_data['first_name']
                 user.last_name = form.cleaned_data['last_name']
                 user.save()
                 # print(url)
             else:
+                user = User.objects.create_user(
+                    username=form.cleaned_data['username'],
+                    email=form.cleaned_data['email'],
+                    password=form.cleaned_data['password'],
+                    is_staff=True
+                )
                 user.name = form.cleaned_data['InstituteName']
             user.save()
             url = "/accounts/" + name + "/login"
@@ -74,8 +94,18 @@ def candidateRegister(request,name):
 
 @login_required(login_url='/')
 def exam(request, name):
-    # print(name)
-    if name == "Institue":
+    print(request.user)
+    if name == "Institute":
         return render(request,'institutePortal.html',{'name':name})
     else:
         return render(request, 'candidatePortal.html', {'name': name})
+
+def aboutExam(request, name):
+    print("hello")
+    form = examDetails()
+    return render(request, "exam_details.html", {'form':form, 'name':name})
+
+def setPaper(request, name):
+    # print(name)
+    l = ["qwer","asdfg","sxqaezd","qazbb"]
+    return render(request, "setExamCode.html", {'name':name,"l":l})

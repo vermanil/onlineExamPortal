@@ -44,3 +44,12 @@ class InstituteLoginForm(forms.Form):
     password = forms.CharField(label="Password", max_length=30,
                                widget=forms.PasswordInput(
                                    attrs={'class': 'border-gradient', 'name': 'password', 'placeholder': 'Password'}))
+
+class examDetails(forms.Form):
+    examCode = forms.CharField(label="Exam Code", max_length=20,
+                               widget=forms.TextInput(attrs={'name':'examCode', 'placeholder':'Exam code'}))
+    examName = forms.CharField(label="Exam Name", max_length=20,
+                               widget=forms.TextInput(attrs={'name': 'examName', 'placeholder': 'Exam name'}))
+    totalTime = forms.TimeField(label="Total Time",widget=forms.TimeInput(format='%H:%M', attrs={'name':'totalTime', 'placeholder': 'Total Time'}))
+    totalMark = forms.IntegerField(label="Total Marks",widget=forms.TextInput(attrs={'name':'totalTime', 'placeholder': 'Total Time'}))
+    createdby = forms.CharField(label="UserName",widget=forms.TextInput(attrs={'name':'createdby', 'placeholder':'Your Username'}))

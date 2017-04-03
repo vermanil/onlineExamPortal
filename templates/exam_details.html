@@ -2,18 +2,28 @@
 {% block content %}
               <div class="row">
         <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 25%">
-    {% if name == "Institute" %}
+{#    {% if name == "Institute" %}#}
     <h1>{{ name }}</h1>
     <p>
     <ol><a href="/Institute/exam">Introduction</a></ol>
-    <ol><a href="/Institute/exam/setPaper">Set paper option</a></ol>
+    <ol><a href="">Set paper option</a></ol>
     <ol><a href="">Candidate Scores</a></ol>
         <ol><a href={{ "/accounts/" }}{{ name }}{{ "/logout" }}>Logout</a></ol>
     </p>
-        {% endif %}
+{#                    {% endif %}#}
           </div>
           <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%">
-        <h3 style="text-align: center"> Welcome to Institute side portal </h3>
+        <h3 style="text-align: center">Exam Details</h3>
+ <form method="POST" action="/Institute/exam/setQues" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Next</button>
+    </form>
           </div>
           </div>
+{#    <script>#}
+{#    function send(){#}
+{#        var http = new XMLHttpRequest();#}
+{#        xhr.open('GET', "/", true);#}
+{#    }#}
+{#    </script>#}
 {% endblock %}
