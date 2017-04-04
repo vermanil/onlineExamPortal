@@ -50,6 +50,6 @@ class examDetails(forms.Form):
                                widget=forms.TextInput(attrs={'name':'examCode', 'placeholder':'Exam code'}))
     examName = forms.CharField(label="Exam Name", max_length=20,
                                widget=forms.TextInput(attrs={'name': 'examName', 'placeholder': 'Exam name'}))
-    totalTime = forms.TimeField(label="Total Time",widget=forms.TimeInput(format='%H:%M', attrs={'name':'totalTime', 'placeholder': 'Total Time'}))
+    totalTime = forms.TimeField(label="Total Time",widget=forms.TimeInput(format='%H:%M', attrs={'name':'totalTime', 'placeholder': '00:00'}))
     totalMark = forms.IntegerField(label="Total Marks",widget=forms.TextInput(attrs={'name':'totalTime', 'placeholder': 'Total Time'}))
     createdby = forms.CharField(label="UserName",widget=forms.TextInput(attrs={'name':'createdby', 'placeholder':'Your Username'}))

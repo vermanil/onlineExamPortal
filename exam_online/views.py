@@ -11,6 +11,7 @@ def index(request):
 
 def candidateLogin(request, name):
     if request.method == 'POST':
+        print(name)
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
@@ -22,10 +23,13 @@ def candidateLogin(request, name):
                 url = "/" + name + "/exam"
                 # print(url)
                 return HttpResponseRedirect(url)
-            else:
-                url = "/accounts/" + name + "/login"
-                return HttpResponseRedirect(url)
-            if name == "Candidate":
+            # else:
+            #     url = "/accounts/" + name + "/login"
+            #     return HttpResponseRedirect(url)
+            # if name == "Candidate":
+            #     print(name)
+            elif name == "Candidate":
+                print(name)
                 login(request, user)
                 # print(name)
                 url = "/" + name + "/exam"
@@ -109,3 +113,7 @@ def setPaper(request, name):
     # print(name)
     l = ["qwer","asdfg","sxqaezd","qazbb"]
     return render(request, "setExamCode.html", {'name':name,"l":l})
+
+def startExam(request,name):
+    print(name)
+    return render(request, "candidateExam.html", {'name':name})

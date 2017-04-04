@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^accounts/(?P<name>[\S]+)/logout/?$', views.Clogout, name="logout"),
     url(r'^(?P<name>[\S]+)/exam/examdetails/?$', views.aboutExam, name="aboutExam"),
     url(r'^(?P<name>[\S]+)/exam/setQues/?$', views.setPaper, name="setPaper"),
+    url(r'^(?P<name>[\S]+)/exam/start/?$', views.startExam, name="startExam"),
 ]

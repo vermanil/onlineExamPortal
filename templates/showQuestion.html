@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <img src="../static/image/pause.jpg" style="float: right; width: 3%; height: 3%" onclick="stop()"></img>
+    <h3 style="text-align: center">Exam Code <br><br>
+        {{ "qwerad" }}</h3>
+        <h5 style="float: right">Remaining Time	&nbsp; <time>03:00</time></h5>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 25%">
+            <p>Question</p>
+          </div>
+          <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%">
+    <p>Question Details</p>
+          </div>
+          </div>
+</div>
+<script>
+    window.onload = timer();
+    function stop()
+    {
+        alert("you want to pause");
+    }
+    function timer()
+    {
+        alert("timer start");
+    }
+</script>
+
+</body>
+</html>
