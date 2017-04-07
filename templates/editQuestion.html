@@ -10,7 +10,7 @@
 <body>
 <div class="container">
     <div class="jumbotron">
-        <img src="../static/image/pause.jpg" style="float: right; width: 3%; height: 3%" onclick="stop()"></img>
+        <img src={{ STATIC_URL }}image/pause.jpg" style="float: right; width: 3%; height: 3%" onclick="stop()">
     <h3 style="text-align: center">Exam Code <br><br>
         {{ "qwerad" }}</h3>
         <h5 style="float: right">Remaining Time	&nbsp; <time>03:00</time></h5>
@@ -20,21 +20,28 @@
             <p>Question</p>
           </div>
           <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%">
-    <p>Question Details</p>
+            <p class="question">1. What is the answer to this question?</p>
+            <ul class="answers">
+            <input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Answer 1</label><br/>
+            <input type="radio" name="q1" value="b" id="q1b"><label for="q1b">Answer 2</label><br/>
+            <input type="radio" name="q1" value="c" id="q1c"><label for="q1c">Answer 3</label><br/>
+            <input type="radio" name="q1" value="d" id="q1d"><label for="q1d">Answer 4</label><br/>
+            </ul>
+              </p>
           </div>
           </div>
 </div>
-<script>
-    window.onload = timer();
-    function stop()
-    {
-        alert("you want to pause");
-    }
-    function timer()
-    {
-        alert("timer start");
-    }
-</script>
+{#<script>#}
+{#    window.onload = timer();#}
+{#    function stop()#}
+{#    {#}
+{#        alert("you want to pause");#}
+{#    }#}
+{#    function timer()#}
+{#    {#}
+{#        alert("timer start");#}
+{#    }#}
+{#</script>#}
 
 </body>
 </html>

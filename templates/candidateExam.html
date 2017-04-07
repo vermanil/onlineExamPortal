@@ -16,10 +16,14 @@
               <h2 style="text-align: center">Select Exam Code</h2>
 
 {##########################################################################              #}
-<form>
+<form method="post" action="/Candidate/exam/show/">
+{% csrf_token %}
   Enter Exam Code:<br><br>
   <input type="text" name="examCode" placeholder="Exam Code"><br><br>
-    <button type="submit" onclick="startQuiz" class="save btn btn-default">Next</button>
+    <button id="sub" type="submit" class="save btn btn-default">Next</button>
+    {% if wrong != "true" %}
+    <p>Enter code is wrong</p>
+    {% endif %}
         </form>
           </div>
           </div>

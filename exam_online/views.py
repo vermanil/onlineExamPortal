@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
+from .models import exam_details
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import candidateLoginForm, RegistrationForm, InstituteLoginForm, InstituteRegistrationForm, examDetails
+from .forms import candidateLoginForm, RegistrationForm, InstituteLoginForm, InstituteRegistrationForm\
+    # , examDetails
 
 # Create your views here.
 def index(request):
@@ -99,21 +101,46 @@ def candidateRegister(request,name):
 @login_required(login_url='/')
 def exam(request, name):
     print(request.user)
+    user = request.user
     if name == "Institute":
-        return render(request,'institutePortal.html',{'name':name})
+        return render(request,'institutePortal.html',{'name':name,'user':user})
     else:
-        return render(request, 'candidatePortal.html', {'name': name})
+        return render(request, 'candidatePortal.html', {'name': name,'user':user})
 
+@login_required(login_url='/')
 def aboutExam(request, name):
     print("hello")
-    form = examDetails()
-    return render(request, "exam_details.html", {'form':form, 'name':name})
+    # form = examDetails()
+    AllExamCode = "none"
+    return render(request, "exam_details.html", {'name':name, 'listCode':AllExamCode})
 
-def setPaper(request, name):
-    # print(name)
-    l = ["qwer","asdfg","sxqaezd","qazbb"]
-    return render(request, "setExamCode.html", {'name':name,"l":l})
+# @login_required(login_url='/')
+# def setPaper(request, name):
+#     # print(name)
+#     l = ["qwer","asdfg","sxqaezd","qazbb"]
+#     return render(request, "setExamCode.html", {'name':name,"l":l})
 
-def startExam(request,name):
-    print(name)
-    return render(request, "candidateExam.html", {'name':name})
+# @login_required(login_url='/')
+# def startExam(request,name):
+#     print(name)
+#     # if exam_details.objects.get(request.examCode):
+#     #     wrong = "true"
+#     # else:
+#     #     wrong = "wrong"
+#     return render(request, "candidateExam.html", {'name':name,'wrong':"true"})
+
+@login_required(login_url='/')
+def setEditQues(request, name):
+    return render(request,'setQuesPaper.html',{'name':name})
+
+# @login_required(login_url='/')
+# def questionForm(request, name):
+#     return render(request, "questionForm.html", {})
+
+@login_required(login_url='/')
+def editQuestionForm(request, name):
+    return render(request, "editQuestion.html", {})
+
+@login_required(login_url='/')
+def CandidateScore(request, name):
+    return render(request,'candidateScore.html', {'name':name})

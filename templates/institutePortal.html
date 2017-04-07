@@ -1,19 +1,21 @@
 {% extends 'home.html' %}
 {% block content %}
-              <div class="row">
+    <div class="row" xmlns="http://www.w3.org/1999/html">
         <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 25%">
     {% if name == "Institute" %}
     <h1>{{ name }}</h1>
     <p>
     <ol><a href="/Institute/exam">Introduction</a></ol>
-    <ol><a href="/Institute/exam/setPaper">Set paper option</a></ol>
-    <ol><a href="">Candidate Scores</a></ol>
+    <ol><a href="/Institute/exam/examdetails">Enter Exam Details</a></ol>
+    <ol><a href="/Institute/exam/scores">Candidate Scores</a></ol>
+        <ol><a href="/Institute/exam/set">Set, edit paper option</a></ol>
         <ol><a href={{ "/accounts/" }}{{ name }}{{ "/logout" }}>Logout</a></ol>
     </p>
         {% endif %}
           </div>
           <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%">
-        <h3 style="text-align: center"> Welcome to Institute side portal </h3>
+        <h3 style="text-align: center"> Welcome to Institute side portal </h3></br>
+              <p style="text-align: center">It is Institute Portal. Here You can edit or set all the paper option.</p>
           </div>
           </div>
 {% endblock %}
