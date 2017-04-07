@@ -7,7 +7,7 @@
     <p>
     <ol><a href="/Candidate/exam">Introduction</a></ol>
     <ol><a href="/Candidate/exam/start">Exam</a></ol>
-    <ol><a href="">Leaderboard</a></ol>
+    <ol><a href="/Candidate/exam/selectCode">Leaderboard</a></ol>
         <ol><a href={{ "/accounts/" }}{{ name }}{{ "/logout" }}>Logout</a></ol>
     </p>
         {% endif %}
@@ -16,11 +16,11 @@
               <h2 style="text-align: center">Select Exam Code</h2>
 
 {##########################################################################              #}
-<form method="post" action="/Candidate/exam/show/">
+<form method="post" action="/Candidate/exam/session/">
 {% csrf_token %}
   Enter Exam Code:<br><br>
   <input type="text" name="examCode" placeholder="Exam Code"><br><br>
-    <button id="sub" type="submit" class="save btn btn-default">Next</button>
+    <button id="sub" type="submit" class="save btn btn-primary btn-lg">Next</button>
     {% if wrong != "true" %}
     <p>Enter code is wrong</p>
     {% endif %}

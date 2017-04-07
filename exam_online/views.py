@@ -18,18 +18,11 @@ def candidateLogin(request, name):
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
-            print(user.is_staff)
+            # print(user.is_staff)
             if name == "Institute":
                 login(request, user)
-                # print(name)
                 url = "/" + name + "/exam"
-                # print(url)
                 return HttpResponseRedirect(url)
-            # else:
-            #     url = "/accounts/" + name + "/login"
-            #     return HttpResponseRedirect(url)
-            # if name == "Candidate":
-            #     print(name)
             elif name == "Candidate":
                 print(name)
                 login(request, user)
@@ -120,22 +113,31 @@ def aboutExam(request, name):
 #     l = ["qwer","asdfg","sxqaezd","qazbb"]
 #     return render(request, "setExamCode.html", {'name':name,"l":l})
 
-# @login_required(login_url='/')
-# def startExam(request,name):
-#     print(name)
-#     # if exam_details.objects.get(request.examCode):
-#     #     wrong = "true"
-#     # else:
-#     #     wrong = "wrong"
-#     return render(request, "candidateExam.html", {'name':name,'wrong':"true"})
+@login_required(login_url='/')
+def startExam(request,name):
+    print(name)
+    # if exam_details.objects.get(request.examCode):
+    #     wrong = "true"
+    # else:
+    #     wrong = "wrong"
+    return render(request, "selectCode.html", {'name':name,'wrong':"true"})
 
 @login_required(login_url='/')
 def setEditQues(request, name):
-    return render(request,'setQuesPaper.html',{'name':name})
+    return render(request,'listAllExamCode.html',{'name':name})
 
 # @login_required(login_url='/')
 # def questionForm(request, name):
 #     return render(request, "questionForm.html", {})
+@login_required(login_url='/')
+def setQues(request, name):
+    if request.method == "POST":
+        examCode = request.POST['examCode']
+        return render(request, "setQuesPaper.html", {'name':name,'examCode':examCode})
+
+@login_required(login_url='/')
+def sessionStart(request, name):
+    return render(request, "editQuestion.html", {})
 
 @login_required(login_url='/')
 def editQuestionForm(request, name):
@@ -144,3 +146,14 @@ def editQuestionForm(request, name):
 @login_required(login_url='/')
 def CandidateScore(request, name):
     return render(request,'candidateScore.html', {'name':name})
+
+@login_required(login_url='/')
+def selectExamCode(request, name):
+    return render(request,'candidateRank.html', {'name':name})
+
+@login_required(login_url='/')
+def seeLeaderboard(request, name):
+    if request.method == "POST":
+        examCode = request.POST['examCode']
+        print(examCode)
+        return render(request,'leaderBoard.html', {'name':name,'examCode':examCode})

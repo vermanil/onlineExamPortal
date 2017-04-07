@@ -1,0 +1,41 @@
+{% extends 'home.html' %}
+{% block content %}
+              <div class="row">
+        <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 35%">
+    {% if name == "Candidate" %}
+    <h1>{{ name }}</h1>
+    <p>
+    <ol><a href="/Candidate/exam">Introduction</a></ol>
+    <ol><a href="/Candidate/exam/start">Exam</a></ol>
+    <ol><a href="/Candidate/exam/selectCode/">Leaderboard</a></ol>
+        <ol><a href={{ "/accounts/" }}{{ name }}{{ "/logout" }}>Logout</a></ol>
+    </p>
+        {% endif %}
+          </div>
+          <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 65%" id="selectCode">
+              <h2 style="text-align: center">Select Exam Code</h2>
+
+{##########################################################################              #}
+<p>Click on exam code to see the Leaderboard</p>
+<button class="btn btn-primary btn-lg c" name="examCode">
+    {{ "Exam Code" }}
+</button>
+{#              <a href="/Candidate/exam/board"><button class="btn btn-primary btn-lg">#}
+{#   See LeaderBoard#}
+{#</button></a>#}
+          </div>
+          </div>
+    <script>
+        $(document).ready(function() {
+            $('#selectCode').on("click", 'button.c', function (){
+            examCode = {'examCode': $(this).text().trim(),
+            'csrfmiddlewaretoken': '{{ csrf_token }}'}
+            alert($(this).text());
+        $.post( "/Institute/exam/board", examCode).done(function( data ) {
+        $("#selectCode").html(data);
+        });
+});
+
+    });
+    </script>
+{% endblock %}
