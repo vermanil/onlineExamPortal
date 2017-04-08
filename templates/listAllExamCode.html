@@ -14,10 +14,12 @@
 {#                    {% endif %}#}
  </div>
  <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%" id="selectCode">
-<h2>List Out All Exam Code</h2>
+<h3>These are Exam Code added by you, click to add or edit the question</h3></br>
+     {% for i in examCode %}
 <a href="#"><button class="btn btn-primary btn-lg c" name="examCode">
-    {{ "Exam Code" }}
+    {{ i.examCode }}
 </button></a>
+     {% endfor %}
           </div>
 </div>
     <script>
@@ -30,7 +32,6 @@
         $("#selectCode").html(data);
         });
 });
-
     });
     </script>
 {% endblock %}

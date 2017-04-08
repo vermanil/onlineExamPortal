@@ -5,17 +5,18 @@ from django.contrib.auth.models import User
 class exam_details(models.Model):
     examCode = models.TextField()
     examName = models.TextField()
-    totalTime = models.IntegerField()
+    totalTime = models.TimeField()
     totalMark = models.IntegerField()
-    createdby = models.ForeignKey(User)
+    createdby = models.TextField()
 
 class questionDetails(models.Model):
-    code = models.ForeignKey(exam_details)
+    code = models.TextField()
     question_id = models.IntegerField()
     correctAnswer = models.TextField()
 
 class optionDetail(models.Model):
-    q_id = models.ForeignKey(questionDetails)
+    q_id = models.IntegerField()
+    question = models.TextField(default="sdfg")
     option1 = models.TextField()
     option2 = models.TextField()
     option3 = models.TextField()

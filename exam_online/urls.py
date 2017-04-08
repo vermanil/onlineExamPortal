@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^(?P<name>[\S]+)/exam/board/?$', views.seeLeaderboard, name="seeLeaderboard"),
     url(r'^(?P<name>[\S]+)/exam/edit/?$', views.editQuestionForm, name="editQuestionForm"),
     url(r'^(?P<name>[\S]+)/exam/scores/?$', views.CandidateScore, name="CandidateScore"),
+    url(r'^(?P<name>[\S]+)/exam/submitQues/?$', views.submitQuestion, name="submitQuestion"),
+    url(r'^(?P<name>[\S]+)/exam/submitExDetails/?$', views.submitExDetail, name="submitExDetail"),
 ]

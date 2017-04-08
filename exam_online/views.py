@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
-from .models import exam_details
+from .models import exam_details, questionDetails, optionDetail, scores
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import candidateLoginForm, RegistrationForm, InstituteLoginForm, InstituteRegistrationForm\
@@ -105,7 +105,7 @@ def aboutExam(request, name):
     print("hello")
     # form = examDetails()
     AllExamCode = "none"
-    return render(request, "exam_details.html", {'name':name, 'listCode':AllExamCode})
+    return render(request, "exam_details.html", {'name':name, 'listCode':AllExamCode, 'user':request.user})
 
 # @login_required(login_url='/')
 # def setPaper(request, name):
@@ -124,7 +124,8 @@ def startExam(request,name):
 
 @login_required(login_url='/')
 def setEditQues(request, name):
-    return render(request,'listAllExamCode.html',{'name':name})
+    examCode = exam_details.objects.filter(createdby=request.user)
+    return render(request,'listAllExamCode.html',{'name':name,'examCode':examCode})
 
 # @login_required(login_url='/')
 # def questionForm(request, name):
@@ -157,3 +158,53 @@ def seeLeaderboard(request, name):
         examCode = request.POST['examCode']
         print(examCode)
         return render(request,'leaderBoard.html', {'name':name,'examCode':examCode})
+
+
+@login_required(login_url='/')
+def submitQuestion(request, name):
+    if request.method == "POST":
+        o = exam_details.objects.filter(examCode=request.POST['examCode'])
+        if o.count() == 0:
+            status = 1
+            return HttpResponse(status)
+        else:
+            Code = request.POST['examCode']
+            number = request.POST['quesNum']
+            question = request.POST['quest']
+            option1 = request.POST['opt1']
+            option2 = request.POST['opt2']
+            option3 = request.POST['opt3']
+            option4 = request.POST['opt4']
+            correct = request.POST['correct']
+            questDetails = questionDetails(code=Code, question_id=number,correctAnswer=correct)
+            questDetails.save()
+            optDetails = optionDetail(q_id=number,question=question,option1=option1,option2=option2,option3=option3,option4=option4)
+            optDetails.save()
+            return render(request,'setQuesPaper.html', {'name':name,'examCode':Code})
+
+@login_required(login_url='/')
+def submitExDetail(request, name):
+    if request.method == "POST":
+        # print(request.user)
+        o = exam_details.objects.filter(examCode=request.POST['examCode'])
+        # print(o.count())
+        if(o.count() == 0):
+            c = request.POST['createdBy']
+            if str(request.user) == str(c):
+                Code = request.POST['examCode']
+                Name = request.POST['examName']
+                Time = request.POST['totalTime']
+                Mark = request.POST['totalMarks']
+                created = request.POST['createdBy']
+                detail = exam_details(examCode = Code,examName=Name,totalTime=Time, totalMark=Mark,createdby=created)
+                detail.save()
+                print(Code)
+                status = 1
+                return HttpResponse(status)
+            else:
+                status = 0
+                return HttpResponse(status)
+        else:
+            status = 0
+            return HttpResponse(status)
+
