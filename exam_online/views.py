@@ -120,12 +120,12 @@ def startExam(request,name):
     #     wrong = "true"
     # else:
     #     wrong = "wrong"
-    return render(request, "selectCode.html", {'name':name,'wrong':"true"})
+    return render(request, "selectCode.html", {'name':name,'wrong':"false"})
 
 @login_required(login_url='/')
 def setEditQues(request, name):
     examCode = exam_details.objects.filter(createdby=request.user)
-    return render(request,'listAllExamCode.html',{'name':name,'examCode':examCode})
+    return render(request,'listAllExamCode.html',{'name':name,'examCode':examCode,"noQues":"yes"})
 
 # @login_required(login_url='/')
 # def questionForm(request, name):
@@ -144,14 +144,18 @@ def sessionStart(request, name):
         total_time = exam_details.objects.filter(examCode=code)
         print(total_time.values())
         allQuestion = optionDetail.objects.filter(code=code)
-        # print(q_id.values())
-        ques = []
-        for i in allQuestion.values():
-            ques.append(i['q_id'])
-            # print(i['question_id'])
-            # allQuestion = optionDetail.objects.filter(q_id=i['question_id'])
-            # print(allQuestion.values())
-        return render(request, "showQuestion.html", {'allQuestion':allQuestion,'examCode':code, 'tot':ques,'total':total_time})
+        print(allQuestion.count())
+        if allQuestion.count() != 0:
+            # print(q_id.values())
+            ques = []
+            for i in allQuestion.values():
+                ques.append(i['q_id'])
+                # print(i['question_id'])
+                # allQuestion = optionDetail.objects.filter(q_id=i['question_id'])
+                # print(allQuestion.values())
+            return render(request, "showQuestion.html", {'allQuestion':allQuestion,'examCode':code, 'tot':ques,'total':total_time})
+        else:
+            return render(request, "selectCode.html", {'name':name,'wrong':"true"})
 
 @login_required(login_url='/')
 def editQuestionForm(request, name,code):
@@ -162,7 +166,11 @@ def editQuestionForm(request, name,code):
     #     # print(i['question_id'])
     #     allQuestion = optionDetail.objects.filter(q_id=i['question_id'])
     #     print(allQuestion.values())
-    return render(request, "editQuestion.html", {'allQuestion':allQuestion, 'examCode': code,'name':name})
+    if allQuestion.count() != 0:
+        return render(request, "editQuestion.html", {'allQuestion':allQuestion, 'examCode': code,'name':name})
+    else:
+        examCode = exam_details.objects.filter(createdby=request.user)
+        return render(request, 'listAllExamCode.html', {'name': name, 'examCode': examCode, "noQues":"NoQuestion"})
 
 @login_required(login_url='/')
 def CandidateScore(request, name):
@@ -173,8 +181,13 @@ def CandidateScore(request, name):
 def selectExamCode(request, name):
     user = request.user
     user = scores.objects.filter(user=user)
+    print(user.count())
     # print(user.values())
-    return render(request,'candidateRank.html', {'name':name,'user':user})
+    if user.count() != 0:
+        return render(request,'candidateRank.html', {'name':name,'user':user,'givenExam':"Yes"})
+    else:
+        return render(request, 'candidateRank.html', {'name': name, 'user': user,'givenExam':"no"})
+
 
 @login_required(login_url='/')
 def showListBoard(request, name):
@@ -193,6 +206,7 @@ def seeLeaderboard(request, name):
         user = scores.objects.filter(user=user)
         if user.count() == 0:
             none = "True"
+            return render(request, 'leaderBoard.html', {'name': name, 'examCode': examCode, 'user': user, 'none': none})
         else:
             print(examCode)
             none="False"
@@ -233,10 +247,6 @@ def submitQuestion(request, name):
 @login_required(login_url='/')
 def updateQues(request, name):
     if request.method == "POST":
-        # o = exam_details.objects.filter(examCode=request.POST['examCode'])
-        # if o.count() == 0:
-        #     status = 0
-        #     return HttpResponse(status)
         o = exam_details.objects.filter(examCode=request.POST['quesNum'])
         if o.count() == 0:
             Code = request.POST['examCode']
@@ -274,9 +284,7 @@ def updateQues(request, name):
 @login_required(login_url='/')
 def submitExDetail(request, name):
     if request.method == "POST":
-        # print(request.user)
         o = exam_details.objects.filter(examCode=request.POST['examCode'])
-        # print(o.count())
         if(o.count() == 0):
             c = request.POST['createdBy']
             if str(request.user) == str(c):

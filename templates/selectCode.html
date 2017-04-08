@@ -2,6 +2,7 @@
 {% block content %}
               <div class="row">
         <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 35%">
+
     {% if name == "Candidate" %}
     <h1>{{ name }}</h1>
     <p>
@@ -21,9 +22,9 @@
   Enter Exam Code:<br><br>
   <input type="text" name="examCode" placeholder="Exam Code" required ><br><br>
     <button id="sub" type="submit" class="save btn btn-primary btn-lg">Next</button>
-    {% if wrong != "true" %}
-    <p>Enter code is wrong</p>
-    {% endif %}
+        {% if wrong == "true"%}
+        <p>Enter code is wrong, Please check</p>
+        {% endif %}
         </form>
           </div>
           </div>

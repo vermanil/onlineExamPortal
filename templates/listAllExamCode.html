@@ -20,6 +20,12 @@
     {{ i.examCode }}
 </button></a>
      {% endfor %}
+
+ {% if noQues == "NoQuestion" %}
+ <script>
+ alert("No question Added to edit");
+ </script>
+ {% endif %}
           </div>
 </div>
     <script>

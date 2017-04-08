@@ -14,17 +14,17 @@
           </div>
           <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 65%" id="selectCode">
               <h2 style="text-align: center">Select Exam Code</h2>
-
+{% if givenExam == "Yes" %}
 {##########################################################################              #}
-<p>Click on exam code to see the Leaderboard</p>
+<p>Click on exam code to see the your score in this exam</p>
 {% for i in user %}
 <button class="btn btn-primary btn-lg c" name="examCode">
     {{ i.examCode }}
 </button>
 {% endfor %}
-{#              <a href="/Candidate/exam/board"><button class="btn btn-primary btn-lg">#}
-{#   See LeaderBoard#}
-{#</button></a>#}
+          {% else %}
+          <h3>You did not give any exam yet</h3>
+          {% endif %}
           </div>
           </div>
     <script>
