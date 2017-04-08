@@ -14,8 +14,11 @@ urlpatterns = [
     url(r'^(?P<name>[\S]+)/exam/session/?$', views.sessionStart, name="sessionStart"),
     url(r'^(?P<name>[\S]+)/exam/selectCode/?$', views.selectExamCode, name="selectExamCode"),
     url(r'^(?P<name>[\S]+)/exam/board/?$', views.seeLeaderboard, name="seeLeaderboard"),
-    url(r'^(?P<name>[\S]+)/exam/edit/?$', views.editQuestionForm, name="editQuestionForm"),
+    url(r'^(?P<name>[\S]+)/exam/(?P<code>[\S]+)/edit/?$', views.editQuestionForm, name="editQuestionForm"),
     url(r'^(?P<name>[\S]+)/exam/scores/?$', views.CandidateScore, name="CandidateScore"),
+    url(r'^(?P<name>[\S]+)/exam/allListBoard/?$', views.showListBoard, name="showListBoard"),
     url(r'^(?P<name>[\S]+)/exam/submitQues/?$', views.submitQuestion, name="submitQuestion"),
     url(r'^(?P<name>[\S]+)/exam/submitExDetails/?$', views.submitExDetail, name="submitExDetail"),
+    url(r'^(?P<name>[\S]+)/exam/session/done?$', views.finalScore, name="finalScore"),
+    url(r'^(?P<name>[\S]+)/exam/updateQues?$', views.updateQues, name="updateQues"),
 ]

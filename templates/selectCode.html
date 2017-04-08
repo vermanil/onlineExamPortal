@@ -19,7 +19,7 @@
 <form method="post" action="/Candidate/exam/session/">
 {% csrf_token %}
   Enter Exam Code:<br><br>
-  <input type="text" name="examCode" placeholder="Exam Code"><br><br>
+  <input type="text" name="examCode" placeholder="Exam Code" required ><br><br>
     <button id="sub" type="submit" class="save btn btn-primary btn-lg">Next</button>
     {% if wrong != "true" %}
     <p>Enter code is wrong</p>

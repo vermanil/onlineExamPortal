@@ -1,12 +1,12 @@
 <h2 style="text-align: center">{{ examCode }}</h2>
 
 {##########################################################################              #}
-{% if none == "True" %}
-<p>No LeaderBoard because You did not give any exam</p>
+{% if None == "True" %}
+    <p>No LeaderBoard because No user give exam till now</p>
 {% else %}
     <h5>LeaderBoard for this exam code</h5>
     <table style="width:100%">
-    {% for i in user %}
+    {% for i in score %}
            <tr>
                 <th>Username</th>
                 <th>Score</th>
@@ -18,5 +18,5 @@
                 <td>{{ i.rank }}</td>
               </tr>
     {% endfor %}
-    </table>
-    {% endif %}
+</table>
+{% endif %}

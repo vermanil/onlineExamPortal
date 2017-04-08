@@ -13,8 +13,25 @@
     </p>
 {#                    {% endif %}#}
  </div>
- <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%">
-<h2>Will show soon the leader board of particular exam Code</h2>
+ <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%" id="selectCode">
+<h3>Click here to see the leaderboard</h3></br>
+     {% for i in examCode %}
+<a href="#"><button class="btn btn-primary btn-lg c" name="examCode">
+    {{ i.examCode }}
+</button></a>
+     {% endfor %}
           </div>
 </div>
+    <script>
+        $(document).ready(function() {
+            $('#selectCode').on("click", 'button.c', function (){
+            examCode = {'examCode': $(this).text().trim(),
+            'csrfmiddlewaretoken': '{{ csrf_token }}'}
+{#            alert($(this).text());#}
+        $.post( "/Institute/exam/allListBoard", examCode).done(function( data ) {
+        $("#selectCode").html(data);
+        });
+});
+    });
+    </script>
 {% endblock %}

@@ -12,36 +12,208 @@
     <div class="jumbotron">
         <img src={{ STATIC_URL }}image/pause.jpg" style="float: right; width: 3%; height: 3%" onclick="stop()">
     <h3 style="text-align: center">Exam Code <br><br>
-        {{ "qwerad" }}</h3>
-        <h5 style="float: right">Remaining Time	&nbsp; <time>03:00</time></h5>
+        {{ examCode}}</h3>
     </div>
     <div class="row">
         <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 25%">
-            <p>Question</p>
-          </div>
+{#    {% if name == "Institute" %}#}
+    <h1>{{ name }}</h1>
+    <p>
+        <ol><a href="/Institute/exam">Introduction</a></ol>
+        <ol><a href="/Institute/exam/examdetails">Enter Exam Details</a></ol>
+        <ol><a href="/Institute/exam/scores">Candidate Scores</a></ol>
+        <ol><a href="/Institute/exam/editSet">Set, edit paper option</a></ol>
+        <ol><a href={{ "/accounts/" }}{{ name }}{{ "/logout" }}>Logout</a></ol>
+    </p>
+{#                    {% endif %}#}
+ </div>
+        <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container" style="width: 70%" id="updateQuestion">
+        {% for i in allQuestion %}
           <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%">
-            <p class="question">1. What is the answer to this question?</p>
+            <p class="question">{{ i.q_id }}. {{ i.question }}</p>
             <ul class="answers">
-            <input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Answer 1</label><br/>
-            <input type="radio" name="q1" value="b" id="q1b"><label for="q1b">Answer 2</label><br/>
-            <input type="radio" name="q1" value="c" id="q1c"><label for="q1c">Answer 3</label><br/>
-            <input type="radio" name="q1" value="d" id="q1d"><label for="q1d">Answer 4</label><br/>
+            <input type="radio" name={{ 'q' }}{{ i.q_id }} value="a" id="q1a"><label for="q1a"> {{ i.option1 }}</label><br/>
+            <input type="radio" name={{ 'q' }}{{ i.q_id }} value="b" id="q1b"><label for="q1b"> {{ i.option2 }}</label><br/>
+            <input type="radio" name={{ 'q' }}{{ i.q_id }} value="c" id="q1c"><label for="q1c"> {{ i.option3 }}</label><br/>
+            <input type="radio" name={{ 'q' }}{{ i.q_id }} value="d" id="q1d"><label for="q1d"> {{ i.option4 }}</label><br/>
             </ul>
-              </p>
+            <h5>Correct Answer:: {{ i.correctAnswer }}</h5>
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalHorizontal">
+    Edit Question
+</button>
+{#<a href="/Institute/exam/{{ examCode }}/edit"><button class="btn btn-primary btn-lg">#}
+{#    Edit Question#}
+{#</button></a>#}
+
+<!-- Modal -->
+<div class="modal fade" id="myModalHorizontal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Edit Question
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+
+                <form class="form-horizontal" role="form" id="addQuestion">
+<div class="form-group">
+                    <label  class="col-sm-2 control-label"
+                              for="examCode">Exam Code</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"
+                        id="examCode" value="{{ examCode }}" name="examCode" required />
+                    </div>
+                  </div>
+{#                    ########################################################################}
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label"
+                              for="quesNum">Question Number</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control"
+                        id="quesNum" value="{{ i.q_id }}" placeholder="Question Number" name="quesNum" required/>
+                    </div>
+                  </div>
+                    {#                    #####################################################}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="quest" >Question</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"
+                            id="quest" value="{{ i.question }}" placeholder="Question" name="quest" required >
+                    </div>
+                  </div>
+                    {#                    #####################################################}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="questMark" >Question Mark</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control"
+                            id="questMark" value="{{ i.questionMark }}"placeholder="Question" name="questMark" required >
+                    </div>
+                  </div>
+{#                    #####################################################}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="opt1" >Option 1</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"
+                            id="opt1" value="{{ i.option1 }}" placeholder="Option 1" name="opt1" required />
+                    </div>
+                  </div>
+{#                    ##########################################################}
+
+ {#                    #####################################################}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="opt2" >Option 2</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"
+                            id="opt2" value="{{ i.option2 }}" placeholder="Option 2" name="opt2" required />
+                    </div>
+                  </div>
+ {#                    #####################################################}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="opt3" >Option 3</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"
+                            id="opt3" value="{{ i.option3 }}" placeholder="Option 3" name="opt3" required />
+                    </div>
+                  </div>
+  {#                    #####################################################}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="opt4" >Option 4</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"
+                            id="opt4" value="{{ i.option4 }}" placeholder="Option 4" name="opt4" required />
+                    </div>
+                  </div>
+  {#                    #####################################################}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="correct" >Correct Answer</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control"
+                            id="correct" value="{{ i.correctAnswer }}" placeholder="Correct Answer" name="correct" required />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit" class="btn btn-primary btn-lg">Done</button>
+                    </div>
+                  </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-lg"
+                        data-dismiss="modal">
+                            Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+              {% endfor %}
+                  </div>
           </div>
           </div>
 </div>
-{#<script>#}
-{#    window.onload = timer();#}
-{#    function stop()#}
-{#    {#}
-{#        alert("you want to pause");#}
-{#    }#}
-{#    function timer()#}
-{#    {#}
-{#        alert("timer start");#}
-{#    }#}
-{#</script>#}
+<script>
+    $( "#addQuestion" ).submit(function( event ) {
+{#    alert( "Handler for .submit() called." );#}
+    var values = {};
+    $.each($("form").serializeArray(), function (i, field) {
+        values[field.name] = field.value;
+});
+        values["csrfmiddlewaretoken"] = '{{ csrf_token }}';
+{#        alert(values["examCode"]);#}
+        var match = 0;
+        if(values["correct"] != values["opt1"])
+        {
+            match = match + 1;
+        }
+        if(values["correct"] != values["opt2"])
+        {
+            match = match + 1;
+        }
+        if(values["correct"] != values["opt3"])
+        {
+            match = match + 1;
+        }
+        if(values["correct"] != values["opt4"])
+        {
+            match = match + 1;
+        }
+        if(match != 3)
+        {
+            alert("correct option does not match any options")
+        }
+        else{
+            console.log("match");
+            $.post( "/Institute/exam/updateQues", values).done(function( data ) {
+                if(data == "0")
+            {
+                alert("Exam code does not exist, please add")
+            }
+            else{
+                    $("#updateQuestion").html(data);
+                }
+            });
+        }
 
+});
+</script>
 </body>
 </html>

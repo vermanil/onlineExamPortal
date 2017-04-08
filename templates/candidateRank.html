@@ -17,9 +17,11 @@
 
 {##########################################################################              #}
 <p>Click on exam code to see the Leaderboard</p>
+{% for i in user %}
 <button class="btn btn-primary btn-lg c" name="examCode">
-    {{ "Exam Code" }}
+    {{ i.examCode }}
 </button>
+{% endfor %}
 {#              <a href="/Candidate/exam/board"><button class="btn btn-primary btn-lg">#}
 {#   See LeaderBoard#}
 {#</button></a>#}

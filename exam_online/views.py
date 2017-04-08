@@ -138,26 +138,65 @@ def setQues(request, name):
 
 @login_required(login_url='/')
 def sessionStart(request, name):
-    return render(request, "editQuestion.html", {})
+    if request.method == "POST":
+        code = request.POST['examCode']
+        print(code)
+        total_time = exam_details.objects.filter(examCode=code)
+        print(total_time.values())
+        allQuestion = optionDetail.objects.filter(code=code)
+        # print(q_id.values())
+        ques = []
+        for i in allQuestion.values():
+            ques.append(i['q_id'])
+            # print(i['question_id'])
+            # allQuestion = optionDetail.objects.filter(q_id=i['question_id'])
+            # print(allQuestion.values())
+        return render(request, "showQuestion.html", {'allQuestion':allQuestion,'examCode':code, 'tot':ques,'total':total_time})
 
 @login_required(login_url='/')
-def editQuestionForm(request, name):
-    return render(request, "editQuestion.html", {})
+def editQuestionForm(request, name,code):
+    print(code)
+    allQuestion = optionDetail.objects.filter(code=code)
+    print(allQuestion.values())
+    # for i in q_id.values():
+    #     # print(i['question_id'])
+    #     allQuestion = optionDetail.objects.filter(q_id=i['question_id'])
+    #     print(allQuestion.values())
+    return render(request, "editQuestion.html", {'allQuestion':allQuestion, 'examCode': code,'name':name})
 
 @login_required(login_url='/')
 def CandidateScore(request, name):
-    return render(request,'candidateScore.html', {'name':name})
+    examCode = exam_details.objects.filter(createdby=request.user)
+    return render(request, 'candidateScore.html', {'name': name, 'examCode': examCode})
 
 @login_required(login_url='/')
 def selectExamCode(request, name):
-    return render(request,'candidateRank.html', {'name':name})
+    user = request.user
+    user = scores.objects.filter(user=user)
+    # print(user.values())
+    return render(request,'candidateRank.html', {'name':name,'user':user})
+
+@login_required(login_url='/')
+def showListBoard(request, name):
+    score = scores.objects.filter(examCode=request.POST['examCode']).order_by('rank')
+    print(score.count())
+    if score.count() == 0:
+        return render(request,'leaderBoard_all.html', {'name':name,'score':score,'None':"True"})
+    else:
+        return render(request,'leaderBoard_all.html', {'name':name,'score':score,'None':"False"})
 
 @login_required(login_url='/')
 def seeLeaderboard(request, name):
     if request.method == "POST":
         examCode = request.POST['examCode']
-        print(examCode)
-        return render(request,'leaderBoard.html', {'name':name,'examCode':examCode})
+        user = request.user
+        user = scores.objects.filter(user=user)
+        if user.count() == 0:
+            none = "True"
+        else:
+            print(examCode)
+            none="False"
+            return render(request,'leaderBoard.html', {'name':name,'examCode':examCode,'user':user,'none':none})
 
 
 @login_required(login_url='/')
@@ -165,22 +204,72 @@ def submitQuestion(request, name):
     if request.method == "POST":
         o = exam_details.objects.filter(examCode=request.POST['examCode'])
         if o.count() == 0:
-            status = 1
+            status = 0
             return HttpResponse(status)
         else:
+            o = exam_details.objects.filter(examCode=request.POST['quesNum'])
+            if o.count() == 0:
+                Code = request.POST['examCode']
+                number = request.POST['quesNum']
+                question = request.POST['quest']
+                mark = request.POST['questMark']
+                option1 = request.POST['opt1']
+                option2 = request.POST['opt2']
+                option3 = request.POST['opt3']
+                option4 = request.POST['opt4']
+                correct = request.POST['correct']
+                questDetails = questionDetails(code=Code, question_id=number)
+                questDetails.save()
+                optDetails = optionDetail(code=Code,q_id=number,question=question,questionMark=mark,option1=option1,option2=option2,option3=option3,option4=option4,correctAnswer=correct)
+                optDetails.save()
+                o = exam_details.objects.get(examCode=request.POST['examCode'])
+                o.totalMark = o.totalMark + int(mark)
+                o.save()
+                return render(request,'setQuesPaper.html', {'name':name,'examCode':Code})
+            else:
+                status = 0
+                return HttpResponse(status)
+
+@login_required(login_url='/')
+def updateQues(request, name):
+    if request.method == "POST":
+        # o = exam_details.objects.filter(examCode=request.POST['examCode'])
+        # if o.count() == 0:
+        #     status = 0
+        #     return HttpResponse(status)
+        o = exam_details.objects.filter(examCode=request.POST['quesNum'])
+        if o.count() == 0:
             Code = request.POST['examCode']
             number = request.POST['quesNum']
             question = request.POST['quest']
+            mark = request.POST['questMark']
             option1 = request.POST['opt1']
             option2 = request.POST['opt2']
             option3 = request.POST['opt3']
             option4 = request.POST['opt4']
             correct = request.POST['correct']
-            questDetails = questionDetails(code=Code, question_id=number,correctAnswer=correct)
+            questDetails = questionDetails(code=Code, question_id=number)
             questDetails.save()
-            optDetails = optionDetail(q_id=number,question=question,option1=option1,option2=option2,option3=option3,option4=option4)
-            optDetails.save()
+            update = optionDetail.objects.get(code=Code,q_id=number)
+            update.code = Code
+            update.q_id = number
+            update.question = question
+            if update.questionMark != mark:
+                o = exam_details.objects.get(examCode=request.POST['examCode'])
+                o.totalMark = o.totalMark + int(mark) - update.questionMark
+                o.save()
+            update.questionMark = mark
+            update.option1 = option1
+            update.option2 = option2
+            update.option3 = option3
+            update.option4 = option4
+            update.correctAnswer = correct
+            update.save()
             return render(request,'setQuesPaper.html', {'name':name,'examCode':Code})
+        else:
+            status = 0
+            return HttpResponse(status)
+
 
 @login_required(login_url='/')
 def submitExDetail(request, name):
@@ -194,7 +283,7 @@ def submitExDetail(request, name):
                 Code = request.POST['examCode']
                 Name = request.POST['examName']
                 Time = request.POST['totalTime']
-                Mark = request.POST['totalMarks']
+                Mark = 0
                 created = request.POST['createdBy']
                 detail = exam_details(examCode = Code,examName=Name,totalTime=Time, totalMark=Mark,createdby=created)
                 detail.save()
@@ -207,4 +296,10 @@ def submitExDetail(request, name):
         else:
             status = 0
             return HttpResponse(status)
+
+@login_required(login_url='/')
+def finalScore(request, name):
+    if request.method == "POST":
+        print(request.POST)
+        return HttpResponse("You have submitted the score")
 
