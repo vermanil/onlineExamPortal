@@ -6,16 +6,14 @@
 {% else %}
     <h5>LeaderBoard for this exam code</h5>
     <table style="width:100%">
-    {% for i in user %}
-           <tr>
+               <tr>
                 <th>Username</th>
                 <th>Score</th>
-                <th>Rank</th>
               </tr>
+    {% for i in user %}
               <tr>
                 <td>{{ i.user }}</td>
                 <td>{{ i.score }}</td>
-                <td>{{ i.rank }}</td>
               </tr>
     {% endfor %}
     </table>

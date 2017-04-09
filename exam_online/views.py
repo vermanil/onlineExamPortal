@@ -192,9 +192,19 @@ def CandidateScore(request, name):
 def selectExamCode(request, name):
     user = request.user
     user = scores.objects.filter(user=user)
-    print(user.count())
+    c = user.count()
     # print(user.values())
-    if user.count() != 0:
+    user = list(user.values())
+    result = {}
+    for i in range(0,c):
+        # print(user[i])
+        for key, value in user[i].items():
+            if value not in result.values():
+                result[key] = value
+    user = []
+    user.append(result)
+    # print(user)
+    if c != 0:
         return render(request,'candidateRank.html', {'name':name,'user':user,'givenExam':"Yes"})
     else:
         return render(request, 'candidateRank.html', {'name': name, 'user': user,'givenExam':"no"})
@@ -202,7 +212,7 @@ def selectExamCode(request, name):
 
 @login_required(login_url='/')
 def showListBoard(request, name):
-    score = scores.objects.filter(examCode=request.POST['examCode']).order_by('rank')
+    score = scores.objects.filter(examCode=request.POST['examCode']).order_by('-score')
     print(score.count())
     if score.count() == 0:
         return render(request,'leaderBoard_all.html', {'name':name,'score':score,'None':"True"})
@@ -320,15 +330,34 @@ def submitExDetail(request, name):
 def finalScore(request, name,code):
     # print(code)
     allQuestion = optionDetail.objects.filter(code=code)
+    print(allQuestion.values())
     totalQuest = allQuestion.count()
+    corrected = 0
+    wrong = 0
+    marks = 0
+    unAnswer = 0
     if request.method == "POST":
         for i in range(1,totalQuest+1):
             # print(i)
             try:
                 print("hello")
-                print(request.POST['q1'])
+                id = 'q' + str(i)
+                ticked = request.POST[id]
+                qId = int(id[1])
+                quest = optionDetail.objects.get(code=code,q_id=qId)
+                print(quest.questionMark)
+                if ticked == quest.correctAnswer:
+                    corrected = corrected + 1
+                    marks = marks + quest.questionMark
+                else:
+                    wrong = wrong + 1
+                print(quest.correctAnswer)
+                print(qId)
             except:
+                unAnswer += 1
                 pass
+        score = scores(user=request.user, score=marks,examCode=code)
+        score.save()
         # print(request.POST)
-        return render(request,'submitScore.html',{'name':name,'user':request.user,'code':code, 'totalQuest':totalQuest})
+        return render(request,'submitScore.html',{'name':name,'user':request.user,'code':code, 'totalQuest':totalQuest,'correct':corrected,'wrong':wrong,'mark':marks, 'Answer':totalQuest - unAnswer})
 

@@ -28,4 +28,4 @@ class scores(models.Model):
     user = models.TextField()
     score = models.IntegerField()
     examCode = models.TextField()
-    rank = models.IntegerField()
+    # rank = models.IntegerField()
