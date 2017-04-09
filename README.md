@@ -5,7 +5,8 @@ It is an Online Exam Portal
   - Institute Portal
 # Institute Portal:
 - Register/Login.
-- Set Paper Option.
+- Set and edit Paper Option.
+- See candidate score of particular exam
 # Candidate portal:
 - Register/Login
 - Choose Exam and give
