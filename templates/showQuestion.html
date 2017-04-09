@@ -10,19 +10,24 @@
 <body>
 <div class="container">
     <div class="jumbotron">
+        <h3 style="text-align: center">Exam Code</h3>
+       <h4 style="text-align: center"> {{ examCode}}</h4>
         <button id="start" style="float: left;" onclick="start()" class="btn btn-primary btn-lg">Start</button>
 {#        <button id="pause" style="float: right;" class="btn btn-primary btn-lg">Pause</button>#}
 {#        <button id="resume" style="float: right;" class="btn btn-primary btn-lg">resume</button><br><br><br>#}
     <br><br><br>
         {% for i in total %}
-        <h3>Total Time: {{ i.totalTime }}</h3>
+            <div style="float: right">
+        <h4>Total Time: {{ i.totalTime }} Min</h4>
+        <h4>Total Mark: {{ i.totalMark }}</h4>
+        <h4>Total Question: {{ totalQuest }}</h4>
+            </div>
         {% endfor %}
+        </br>
         <h4>Spend Time: HH:MM:SS</h4>
         <span id="hour"></span>
         <span id="min"></span>
         <span id="sec"></span>
-    <h3 style="text-align: center">Exam Code <br><br>
-        {{ examCode}}</h3>
     </div>
     <div class="row">
         <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 25%">
@@ -33,19 +38,19 @@
                 </div>
             {% endfor%}
           </div>
-        {% for i in allQuestion %}
+            </br>
           <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 70%">
-            <form method="post" action="/Candidate/exam/session/done">{% csrf_token %}
+              {% for i in allQuestion %}
+            <form id="questForm" method="post" action="/Candidate/exam/session/{{ examCode }}/done">{% csrf_token %}
             <p class="question">{{ i.q_id }}. {{ i.question }}</p>
             <ul class="answers">
-            <input type="radio" name={{ 'q' }}{{ i.q_id }} value={{ i.option1 }} id="q1a" required ><label for="q1a">{{ i.option1 }}</label><br/>
-            <input type="radio" name={{ 'q' }}{{ i.q_id }} value={{ i.option2 }} id="q1b" required ><label for="q1b">{{ i.option2 }}</label><br/>
-            <input type="radio" name={{ 'q' }}{{ i.q_id }} value={{ i.option3 }} id="q1c" required ><label for="q1c">{{ i.option3 }}</label><br/>
-            <input type="radio" name={{ 'q' }}{{ i.q_id }} value={{ i.option4 }} id="q1d" required ><label for="q1d">{{ i.option4 }}</label><br/>
+            <input type="radio" name={{ 'q' }}{{ i.q_id }} value={{ i.option1 }} id={{ 'q' }}{{ i.q_id }} ><label for="q1a">{{ i.option1 }}</label><br/>
+            <input type="radio" name={{ 'q' }}{{ i.q_id }} value={{ i.option2 }} id={{ 'p' }}{{ i.q_id }} ><label for="q1b">{{ i.option2 }}</label><br/>
+            <input type="radio" name={{ 'q' }}{{ i.q_id }} value={{ i.option3 }} id={{ 'r' }}{{ i.q_id }} ><label for="q1c">{{ i.option3 }}</label><br/>
+            <input type="radio" name={{ 'q' }}{{ i.q_id }} value={{ i.option4 }} id={{ 's' }}{{ i.q_id }} ><label for="q1d">{{ i.option4 }}</label><br/>
             </ul>
-              {% endfor %}
-                <button id="sub" type="submit" disabled class="save btn btn-primary btn-lg">Submit</button>
-              </p>
+        {% endfor %}
+        <button id="sub" type="submit" onclick="Answer()" disabled class="save btn btn-primary btn-lg">Submit</button>
     </form>
           </div>
           </div>
@@ -79,13 +84,68 @@ var Clock = {
 };
 
 function start() {
-    alert("you want to start the exam");
+    alert("you want to start the exam, Don't press back after start the quiz");
     document.getElementById("sub").disabled = false
+   var count = {{ totalQuest }}
+    var ans = 0;
+    for (var i = 1; i <= count; i++) {
+{#        alert("hello")#}
+{#        alert(document.getElementById('q' + i).innerHTML)#}
+        document.getElementById('q' + i).disabled = false;
+        document.getElementById('p' + i).disabled = false;
+        document.getElementById('r' + i).disabled = false;
+        document.getElementById('s' + i).disabled = false;
+    }
    Clock.start();
 }
 
+window.onload = function () {
+    var count = {{ totalQuest }}
+    var ans = 0;
+    for (var i = 1; i <= count; i++) {
+{#        alert("hello")#}
+{#        alert(document.getElementById('q' + i).innerHTML)#}
+        document.getElementById('q' + i).disabled = true;
+        document.getElementById('p' + i).disabled = true;
+        document.getElementById('r' + i).disabled = true;
+        document.getElementById('s' + i).disabled = true;
+    }
+}
 {#$('#pause').click(function () { Clock.pause(); });#}
 {#$('#resume').click(function () { Clock.resume(); });#}
+{#    function answerQuestion(){#}
+{#        alert("clicked")#}
+{#        $('ul').on('click', 'input', function(){#}
+{#            var id = $(this).attr('id');#}
+{#            alert(id)#}
+{#            $('ul').off('click','input',function () {#}
+{#                alert("off")#}
+{#            });#}
+{#     });#}
+function Answer() {
+    var count= {{ totalQuest }}
+    var ans = 0;
+    for(var i=1;i<=count;i++)
+    {
+        var id = '#q' + i;
+        if($('#q' + i).is(':checked')) {
+            ans=ans+1;
+        }
+        if($('#p' + i).is(':checked')) {
+            ans=ans+1;
+        }
+        if($('#r' + i).is(':checked')) {
+            ans=ans+1;
+        }
+        if($('#s' + i).is(':checked')) {
+            ans=ans+1;
+        }
+    }
+    alert(ans)
+
+}
+
+
 
 </script>
 

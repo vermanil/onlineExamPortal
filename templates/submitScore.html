@@ -1,0 +1,29 @@
+{% extends 'home.html' %}
+{% block content %}
+              <div class="row">
+        <div class="col-sm-6 col-lg-6 col-md-6 imgcntr container jumbotron" style="width: 35%">
+
+    {% if name == "Candidate" %}
+    <h1>{{ name }}</h1>
+    <p>
+    <ol><a href="/Candidate/exam">Introduction</a></ol>
+    <ol><a href="/Candidate/exam/start">Exam</a></ol>
+    <ol><a href="/Candidate/exam/selectCode">Leaderboard</a></ol>
+        <ol><a href={{ "/accounts/" }}{{ name }}{{ "/logout" }}>Logout</a></ol>
+    </p>
+        {% endif %}
+          </div>
+          <div class="col-sm-6 col-lg-6 col-md-6 imgcntr " style="width: 65%">
+              <h1 style="text-align: center">{{ code }}</h1>
+              <h2>User::&nbsp;{{ user }}</h2></br>
+<h4>Total Number of Question:: {{ totalQuest }}</h4>
+<h4>Total Number of Answered Question::</h4>
+<h4>Total Number of UnAnswered Question::</h4>
+<h4>Total Number of Correct Answer::</h4>
+<h4>Total Marks you have received::</h4>
+
+{##########################################################################              #}
+
+          </div>
+          </div>
+{% endblock %}

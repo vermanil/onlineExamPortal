@@ -32,7 +32,7 @@
             $('#selectCode').on("click", 'button.c', function (){
             examCode = {'examCode': $(this).text().trim(),
             'csrfmiddlewaretoken': '{{ csrf_token }}'}
-            alert($(this).text());
+{#            alert($(this).text());#}
         $.post( "/Institute/exam/board", examCode).done(function( data ) {
         $("#selectCode").html(data);
         });

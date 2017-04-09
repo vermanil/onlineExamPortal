@@ -35,13 +35,19 @@ def candidateLogin(request, name):
                 return HttpResponseRedirect(url)
         else:
             url = "/accounts/" + name + "/login"
-            return HttpResponseRedirect(url)
+            status = 0
+            if name == "Candidate":
+                form = candidateLoginForm()
+            else:
+                form = InstituteLoginForm()
+            return render(request, "Login.html", {'form': form, "name": name, 'status':status})
     else:
+        status = 1
         if name == "Candidate":
             form = candidateLoginForm()
         else:
             form = InstituteLoginForm()
-        return render(request, "Login.html", {'form': form, "name": name})
+        return render(request, "Login.html", {'form': form, "name": name, 'status':status})
 
 @login_required(login_url='/')
 def Clogout(request,name):
@@ -73,7 +79,7 @@ def candidateRegister(request,name):
                 user.last_name = form.cleaned_data['last_name']
                 user.save()
                 # print(url)
-            else:
+            elif name == "Institute":
                 user = User.objects.create_user(
                     username=form.cleaned_data['username'],
                     email=form.cleaned_data['email'],
@@ -81,15 +87,23 @@ def candidateRegister(request,name):
                     is_staff=True
                 )
                 user.name = form.cleaned_data['InstituteName']
-            user.save()
-            url = "/accounts/" + name + "/login"
-        return HttpResponseRedirect(url)
+                user.save()
+            else:
+                status = 3
+            status = 2
+            # url = "/accounts/" + name + "/login"
+            return render(request, "Login.html", {'form': form, "name": name, 'status': status})
     else:
         if name=="Candidate":
             form = RegistrationForm()
-        else:
+            status=1
+        elif name=="Institute":
             form = InstituteRegistrationForm()
-        return render(request, "reg.html", {'form': form, "name": name})
+            status=1
+        else:
+            status=3
+            return render(request, "reg.html", {"name": name, 'status': status})
+        return render(request, "reg.html", {'form': form, "name": name,'status':status})
 
 @login_required(login_url='/')
 def exam(request, name):
@@ -144,16 +158,13 @@ def sessionStart(request, name):
         total_time = exam_details.objects.filter(examCode=code)
         print(total_time.values())
         allQuestion = optionDetail.objects.filter(code=code)
-        print(allQuestion.count())
+        totalQuest = allQuestion.count()
         if allQuestion.count() != 0:
             # print(q_id.values())
             ques = []
             for i in allQuestion.values():
                 ques.append(i['q_id'])
-                # print(i['question_id'])
-                # allQuestion = optionDetail.objects.filter(q_id=i['question_id'])
-                # print(allQuestion.values())
-            return render(request, "showQuestion.html", {'allQuestion':allQuestion,'examCode':code, 'tot':ques,'total':total_time})
+            return render(request, "showQuestion.html", {'allQuestion':allQuestion,'examCode':code, 'tot':ques,'total':total_time,'totalQuest':totalQuest})
         else:
             return render(request, "selectCode.html", {'name':name,'wrong':"true"})
 
@@ -203,7 +214,7 @@ def seeLeaderboard(request, name):
     if request.method == "POST":
         examCode = request.POST['examCode']
         user = request.user
-        user = scores.objects.filter(user=user)
+        user = scores.objects.filter(examCode=examCode)
         if user.count() == 0:
             none = "True"
             return render(request, 'leaderBoard.html', {'name': name, 'examCode': examCode, 'user': user, 'none': none})
@@ -306,8 +317,18 @@ def submitExDetail(request, name):
             return HttpResponse(status)
 
 @login_required(login_url='/')
-def finalScore(request, name):
+def finalScore(request, name,code):
+    # print(code)
+    allQuestion = optionDetail.objects.filter(code=code)
+    totalQuest = allQuestion.count()
     if request.method == "POST":
-        print(request.POST)
-        return HttpResponse("You have submitted the score")
+        for i in range(1,totalQuest+1):
+            # print(i)
+            try:
+                print("hello")
+                print(request.POST['q1'])
+            except:
+                pass
+        # print(request.POST)
+        return render(request,'submitScore.html',{'name':name,'user':request.user,'code':code, 'totalQuest':totalQuest})
 
