@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 # Create your models here.
 
 class exam_details(models.Model):
@@ -28,4 +29,7 @@ class scores(models.Model):
     user = models.TextField()
     score = models.IntegerField()
     examCode = models.TextField()
-    # rank = models.IntegerField()
+
+class timeManager(models.Model):
+    user = models.TextField()
+    startTime = models.TimeField(default=timezone.now())

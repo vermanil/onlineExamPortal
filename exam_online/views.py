@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
-from .models import exam_details, questionDetails, optionDetail, scores
+from .models import exam_details, questionDetails, optionDetail, scores,timeManager
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import candidateLoginForm, RegistrationForm, InstituteLoginForm, InstituteRegistrationForm\
+from .forms import candidateLoginForm, RegistrationForm, InstituteLoginForm, InstituteRegistrationForm
+from django.utils import timezone
     # , examDetails
 
 # Create your views here.
@@ -157,6 +158,15 @@ def sessionStart(request, name):
         print(code)
         total_time = exam_details.objects.filter(examCode=code)
         print(total_time.values())
+        time = timeManager.objects.get(user=request.user)
+        print(time.user)
+        print(request.user)
+        if str(time.user) == str(request.user):
+            time.startTime = timezone.now()
+            time.save()
+        else:
+            tim = timeManager(user=request.user)
+            tim.save()
         allQuestion = optionDetail.objects.filter(code=code)
         totalQuest = allQuestion.count()
         if allQuestion.count() != 0:
@@ -279,8 +289,8 @@ def updateQues(request, name):
             option3 = request.POST['opt3']
             option4 = request.POST['opt4']
             correct = request.POST['correct']
-            questDetails = questionDetails(code=Code, question_id=number)
-            questDetails.save()
+            # questDetails = questionDetails(code=Code, question_id=number)
+            # questDetails.save()
             update = optionDetail.objects.get(code=Code,q_id=number)
             update.code = Code
             update.q_id = number
@@ -337,27 +347,41 @@ def finalScore(request, name,code):
     marks = 0
     unAnswer = 0
     if request.method == "POST":
-        for i in range(1,totalQuest+1):
-            # print(i)
-            try:
-                print("hello")
-                id = 'q' + str(i)
-                ticked = request.POST[id]
-                qId = int(id[1])
-                quest = optionDetail.objects.get(code=code,q_id=qId)
-                print(quest.questionMark)
-                if ticked == quest.correctAnswer:
-                    corrected = corrected + 1
-                    marks = marks + quest.questionMark
-                else:
-                    wrong = wrong + 1
-                print(quest.correctAnswer)
-                print(qId)
-            except:
-                unAnswer += 1
-                pass
-        score = scores(user=request.user, score=marks,examCode=code)
-        score.save()
-        # print(request.POST)
-        return render(request,'submitScore.html',{'name':name,'user':request.user,'code':code, 'totalQuest':totalQuest,'correct':corrected,'wrong':wrong,'mark':marks, 'Answer':totalQuest - unAnswer})
-
+        Nowtime = timezone.now()
+        # print(Nowtime.time().hour)
+        time = timeManager.objects.get(user=request.user)
+        h = abs(Nowtime.time().hour - time.startTime.hour)
+        m = abs(Nowtime.time().minute - time.startTime.minute)
+        s = abs(Nowtime.time().second - time.startTime.second)
+        print(h,m,s)
+        duration = h*60+m+(s/60) - 2
+        # print("duration")
+        # print(duration)
+        a = exam_details.objects.get(examCode=code)
+        # print(a.totalTime)
+        if a.totalTime >= duration:
+            for i in range(1,totalQuest+1):
+                # print(i)
+                try:
+                    # print("hello")
+                    id = 'q' + str(i)
+                    ticked = request.POST[id]
+                    qId = int(id[1])
+                    quest = optionDetail.objects.get(code=code,q_id=qId)
+                    # print(quest.questionMark)
+                    if ticked == quest.correctAnswer:
+                        corrected = corrected + 1
+                        marks = marks + quest.questionMark
+                    else:
+                        wrong = wrong + 1
+                    # print(quest.correctAnswer)
+                    # print(qId)
+                except:
+                    unAnswer += 1
+                    pass
+            score = scores(user=request.user, score=marks,examCode=code)
+            score.save()
+            # print(request.POST)
+            return render(request,'submitScore.html',{'name':name,'user':request.user,'code':code, 'totalQuest':totalQuest,'correct':corrected,'wrong':wrong,'mark':marks, 'Answer':totalQuest - unAnswer})
+        else:
+            return HttpResponse("You take more than given time, sorry")

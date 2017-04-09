@@ -84,7 +84,7 @@ var Clock = {
 };
 
 function start() {
-    alert("you want to start the exam, Don't press back after start the quiz");
+    alert("you want to start the exam, Don't refresh or press back after start the quiz");
     document.getElementById("sub").disabled = false
    var count = {{ totalQuest }}
     var ans = 0;
@@ -141,7 +141,7 @@ function Answer() {
             ans=ans+1;
         }
     }
-    alert(ans)
+    alert("You have answered: " + ans + " Question, You want to submit");
 
 }
 </script>
