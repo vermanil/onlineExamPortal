@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^(?P<name>[\S]+)/exam/submitExDetails/?$', views.submitExDetail, name="submitExDetail"),
     url(r'^(?P<name>[\S]+)/exam/session/(?P<code>[\S]+)/done?$', views.finalScore, name="finalScore"),
     url(r'^(?P<name>[\S]+)/exam/updateQues?$', views.updateQues, name="updateQues"),
+    url(r'^(?P<name>[\S]+)/exam/time?$', views.timeManage, name="timeManage"),
 ]

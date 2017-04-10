@@ -22,10 +22,10 @@
                   <script>
                   alert("You have Registered");
                   </script>
-                  {% elif atatus == 3 %}
-                  <script>
-                  alert("Something wrong with your URL");
-                  </script>
+                  {% elif status == 3 %}
+                      {% elif status == "User does not exist" %}
+                  <p> {{ status }}</p>
+
               {% endif %}
           </div>
           </div>

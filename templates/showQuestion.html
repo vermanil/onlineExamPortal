@@ -95,7 +95,21 @@ function start() {
 {#      alert('test');#}
       document.getElementById("questForm").submit();
     }
-    document.getElementById("sub").disabled = false
+
+    document.getElementById("sub").disabled = false;
+    var values = {};
+    values["csrfmiddlewaretoken"] = '{{ csrf_token }}';
+    $.post( "/Candidate/exam/time", values).done(function( data ) {
+        if(data == "0")
+            {
+                alert("Exam code does not exist, please add")
+            }
+            else
+        {
+            alert("done");
+        }
+            });
+
    var count = {{ totalQuest }}
     var ans = 0;
     for (var i = 1; i <= count; i++) {

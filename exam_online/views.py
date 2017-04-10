@@ -20,7 +20,8 @@ def candidateLogin(request, name):
         user = authenticate(username=username, password=password)
         if user is not None:
             # print(user.is_staff)
-            if name == "Institute":
+            # print(name)
+            if name == "Institute" and user.is_staff:
                 login(request, user)
                 url = "/" + name + "/exam"
                 return HttpResponseRedirect(url)
@@ -33,7 +34,12 @@ def candidateLogin(request, name):
                 return HttpResponseRedirect(url)
             else:
                 url = "/accounts/" + name + "/login"
-                return HttpResponseRedirect(url)
+                status = "User does not exist"
+                if name == "Candidate":
+                    form = candidateLoginForm()
+                else:
+                    form = InstituteLoginForm()
+                return render(request, "Login.html", {'form': form, "name": name, 'status': status})
         else:
             url = "/accounts/" + name + "/login"
             status = 0
@@ -158,15 +164,6 @@ def sessionStart(request, name):
         print(code)
         total_time = exam_details.objects.filter(examCode=code)
         print(total_time.values())
-        time = timeManager.objects.get(user=request.user)
-        print(time.user)
-        print(request.user)
-        if str(time.user) == str(request.user):
-            time.startTime = timezone.now()
-            time.save()
-        else:
-            tim = timeManager(user=request.user)
-            tim.save()
         allQuestion = optionDetail.objects.filter(code=code)
         totalQuest = allQuestion.count()
         if allQuestion.count() != 0:
@@ -177,6 +174,23 @@ def sessionStart(request, name):
             return render(request, "showQuestion.html", {'allQuestion':allQuestion,'examCode':code, 'tot':ques,'total':total_time,'totalQuest':totalQuest})
         else:
             return render(request, "selectCode.html", {'name':name,'wrong':"true"})
+
+def timeManage(request,name):
+    print(request.user)
+    tim = timeManager.objects.filter(user=request.user)
+    if tim.count() != 0:
+        time = timeManager.objects.get(user=request.user)
+    # print(time.user)
+    # print(request.user)
+    # if str(time.user) == str(request.user):
+        time.startTime = timezone.now()
+        time.save()
+        data=1
+    else:
+        tim = timeManager(user=request.user)
+        tim.save()
+        data=1
+    return HttpResponse(data)
 
 @login_required(login_url='/')
 def editQuestionForm(request, name,code):
@@ -357,8 +371,8 @@ def finalScore(request, name,code):
         s = abs(Nowtime.time().second - time.startTime.second)
         print(h,m,s)
         duration = h*60+m+(s/60) - 2
-        # print("duration")
-        # print(duration)
+        #print("duration")
+        print(duration)
         a = exam_details.objects.get(examCode=code)
         # print(a.totalTime)
         if a.totalTime >= duration:
