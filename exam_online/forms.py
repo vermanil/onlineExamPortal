@@ -31,7 +31,7 @@ class InstituteRegistrationForm(forms.Form):
     InstituteName = forms.CharField(label='', required=True, widget=forms.TextInput(
         attrs={'class': 'border-gradient', 'placeholder': 'Institute Name'}))
     username = forms.CharField(label='',
-                               widget=forms.TextInput(attrs={'class': 'border-gradient', 'placeholder': 'UserName'}))
+                               widget=forms.TextInput(attrs={'class': 'border-gradient','name':'username', 'placeholder': 'UserName'}))
     password = forms.CharField(label='',
                                widget=forms.PasswordInput(attrs={'class': 'border-gradient', 'placeholder': 'Password'}))
     email = forms.EmailField(label='',

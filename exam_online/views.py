@@ -74,27 +74,46 @@ def candidateRegister(request,name):
             form = RegistrationForm(request.POST)
         else:
             form = InstituteRegistrationForm(request.POST)
-        # print(form.is_valid())
+
         if form.is_valid():  # invoke .is_valid
             if name == "Candidate":
-                user = User.objects.create_user(
-                    username=form.cleaned_data['username'],
-                    email=form.cleaned_data['email'],
-                    password=form.cleaned_data['password']
-                )
-                user.first_name = form.cleaned_data['first_name']
-                user.last_name = form.cleaned_data['last_name']
-                user.save()
-                # print(url)
+                username = form.cleaned_data['username']
+                alreadyUser = User.objects.filter(username=username)
+                # print(alreadyUser.count())
+                if (alreadyUser.count() != 0):
+                    form = RegistrationForm()
+                    return render(request, "reg.html", {'form': form, "name": name, 'stat': "User already exist"})
+                else:
+                    user = User.objects.create_user(
+                        username=form.cleaned_data['username'],
+                        email=form.cleaned_data['email'],
+                        password=form.cleaned_data['password']
+                    )
+                    user.first_name = form.cleaned_data['first_name']
+                    user.last_name = form.cleaned_data['last_name']
+                    user.save()
+                    form = candidateLoginForm()
+                    return render(request, "Login.html", {'form': form, "name": name})
+                    # print(url)
             elif name == "Institute":
-                user = User.objects.create_user(
-                    username=form.cleaned_data['username'],
-                    email=form.cleaned_data['email'],
-                    password=form.cleaned_data['password'],
-                    is_staff=True
-                )
-                user.name = form.cleaned_data['InstituteName']
-                user.save()
+                username = form.cleaned_data['username']
+                alreadyUser = User.objects.filter(username=username)
+                # print(alreadyUser.count())
+                if (alreadyUser.count() != 0):
+                    form = InstituteRegistrationForm()
+                    return render(request, "reg.html", {'form': form,"name": name, 'stat': "User already exist"})
+                else:
+                    print("hello")
+                    user = User.objects.create_user(
+                        username=form.cleaned_data['username'],
+                        email=form.cleaned_data['email'],
+                        password=form.cleaned_data['password'],
+                        is_staff=True
+                    )
+                    user.name = form.cleaned_data['InstituteName']
+                    user.save()
+                    form = InstituteLoginForm()
+                    return render(request, "Login.html", {'form': form, "name": name})
             else:
                 status = 3
             status = 2
