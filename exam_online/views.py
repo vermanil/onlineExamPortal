@@ -182,16 +182,16 @@ def sessionStart(request, name):
 def editQuestionForm(request, name,code):
     print(code)
     allQuestion = optionDetail.objects.filter(code=code)
-    print(allQuestion.values())
+    l = allQuestion.count()
     # for i in q_id.values():
     #     # print(i['question_id'])
     #     allQuestion = optionDetail.objects.filter(q_id=i['question_id'])
     #     print(allQuestion.values())
     if allQuestion.count() != 0:
-        return render(request, "editQuestion.html", {'allQuestion':allQuestion, 'examCode': code,'name':name})
+        return render(request, "editQuestion.html", {'allQuestion':allQuestion, 'examCode': code,'name':name, "len":l})
     else:
         examCode = exam_details.objects.filter(createdby=request.user)
-        return render(request, 'listAllExamCode.html', {'name': name, 'examCode': examCode, "noQues":"NoQuestion"})
+        return render(request, 'listAllExamCode.html', {'name': name, 'examCode': examCode, "noQues":"NoQuestion",})
 
 @login_required(login_url='/')
 def CandidateScore(request, name):
@@ -279,12 +279,14 @@ def submitQuestion(request, name):
 def updateQues(request, name):
     if request.method == "POST":
         o = exam_details.objects.filter(examCode=request.POST['quesNum'])
+        print(o.count())
         if o.count() == 0:
             Code = request.POST['examCode']
             number = request.POST['quesNum']
             question = request.POST['quest']
             mark = request.POST['questMark']
             option1 = request.POST['opt1']
+            print(option1)
             option2 = request.POST['opt2']
             option3 = request.POST['opt3']
             option4 = request.POST['opt4']

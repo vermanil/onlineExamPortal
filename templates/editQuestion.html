@@ -39,15 +39,16 @@
             </ul>
             <h5>Correct Answer:: {{ i.correctAnswer }}</h5>
 
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalHorizontal">
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target={{ "#myModalHorizontal" }}{{ i.q_id }}>
     Edit Question
-</button>
+</button></br></br>
+
 {#<a href="/Institute/exam/{{ examCode }}/edit"><button class="btn btn-primary btn-lg">#}
 {#    Edit Question#}
 {#</button></a>#}
 
 <!-- Modal -->
-<div class="modal fade" id="myModalHorizontal" tabindex="-1" role="dialog"
+<div class="modal fade" id={{ "myModalHorizontal" }}{{ i.q_id }} tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -66,7 +67,7 @@
             <!-- Modal Body -->
             <div class="modal-body">
 
-                <form class="form-horizontal" role="form" id="addQuestion">
+                <form class="form-horizontal" role="form" id={{ "addQuestion" }}{{ i.q_id }}>
 <div class="form-group">
                     <label  class="col-sm-2 control-label"
                               for="examCode">Exam Code</label>
@@ -171,49 +172,47 @@
           </div>
 </div>
 <script>
-    $( "#addQuestion" ).submit(function( event ) {
-{#    alert( "Handler for .submit() called." );#}
-    var values = {};
-    $.each($("form").serializeArray(), function (i, field) {
-        values[field.name] = field.value;
-});
-        values["csrfmiddlewaretoken"] = '{{ csrf_token }}';
-{#        alert(values["examCode"]);#}
-        var match = 0;
-        if(values["correct"] != values["opt1"])
-        {
-            match = match + 1;
-        }
-        if(values["correct"] != values["opt2"])
-        {
-            match = match + 1;
-        }
-        if(values["correct"] != values["opt3"])
-        {
-            match = match + 1;
-        }
-        if(values["correct"] != values["opt4"])
-        {
-            match = match + 1;
-        }
-        if(match != 3)
-        {
-            alert("correct option does not match any options")
-        }
-        else{
-            console.log("match");
-            $.post( "/Institute/exam/updateQues", values).done(function( data ) {
-                if(data == "0")
-            {
-                alert("Exam code does not exist, please add")
-            }
-            else{
-                    $("#updateQuestion").html(data);
-                }
-            });
-        }
+   for(var i=1;i<={{ len }};i++) {
+       $("#addQuestion" + i).submit(function (event) {
+           {#    alert( "Handler for .submit() called." );#}
+           var values = {};
+           $.each($(this).serializeArray(), function (i, field) {
+               values[field.name] = field.value;
+           });
 
-});
+           values["csrfmiddlewaretoken"] = '{{ csrf_token }}';
+           {#        alert(values["examCode"]);#}
+           var match = 0;
+           if (values["correct"] != values["opt1"]) {
+               match = match + 1;
+           }
+           if (values["correct"] != values["opt2"]) {
+               match = match + 1;
+           }
+           if (values["correct"] != values["opt3"]) {
+               match = match + 1;
+           }
+           if (values["correct"] != values["opt4"]) {
+               match = match + 1;
+           }
+           if (match != 3) {
+               alert("correct option does not match any options")
+           }
+           else {
+               console.log("match");
+               $.post("/Institute/exam/updateQues", values).done(function (data) {
+                   if (data == "0") {
+                       alert("Exam code does not exist, please add")
+                   }
+                   else {
+                       $("#updateQuestion").html(data);
+                   }
+               });
+           }
+
+       });
+   }
+
 </script>
 </body>
 </html>

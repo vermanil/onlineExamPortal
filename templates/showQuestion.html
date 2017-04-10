@@ -22,7 +22,6 @@
         <h4>Total Mark: {{ i.totalMark }}</h4>
         <h4>Total Question: {{ totalQuest }}</h4>
             </div>
-        {% endfor %}
         </br>
         <h4>Spend Time: HH:MM:SS</h4>
         <span id="hour"></span>
@@ -85,12 +84,21 @@ var Clock = {
 
 function start() {
     alert("you want to start the exam, Don't refresh or press back after start the quiz");
+      var auto_refresh = setInterval(
+    function()
+    {
+    submitform();
+    }, {{ i.totalTime }} * {{ 60 }} * {{ 1000 }});
+
+    function submitform()
+    {
+{#      alert('test');#}
+      document.getElementById("questForm").submit();
+    }
     document.getElementById("sub").disabled = false
    var count = {{ totalQuest }}
     var ans = 0;
     for (var i = 1; i <= count; i++) {
-{#        alert("hello")#}
-{#        alert(document.getElementById('q' + i).innerHTML)#}
         document.getElementById('q' + i).disabled = false;
         document.getElementById('p' + i).disabled = false;
         document.getElementById('r' + i).disabled = false;
@@ -98,6 +106,8 @@ function start() {
     }
    Clock.start();
 }
+
+
 
 window.onload = function () {
     var count = {{ totalQuest }}
@@ -111,17 +121,7 @@ window.onload = function () {
         document.getElementById('s' + i).disabled = true;
     }
 }
-{#$('#pause').click(function () { Clock.pause(); });#}
-{#$('#resume').click(function () { Clock.resume(); });#}
-{#    function answerQuestion(){#}
-{#        alert("clicked")#}
-{#        $('ul').on('click', 'input', function(){#}
-{#            var id = $(this).attr('id');#}
-{#            alert(id)#}
-{#            $('ul').off('click','input',function () {#}
-{#                alert("off")#}
-{#            });#}
-{#     });#}
+
 function Answer() {
     var count= {{ totalQuest }}
     var ans = 0;
@@ -145,6 +145,7 @@ function Answer() {
 
 }
 </script>
+        {% endfor %}
 
 </body>
 </html>
