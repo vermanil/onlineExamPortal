@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+
+
 # Create your models here.
 
 class exam_details(models.Model):
@@ -10,9 +12,11 @@ class exam_details(models.Model):
     totalMark = models.IntegerField()
     createdby = models.TextField()
 
+
 class questionDetails(models.Model):
     code = models.TextField()
     question_id = models.IntegerField()
+
 
 class optionDetail(models.Model):
     code = models.TextField()
@@ -25,10 +29,12 @@ class optionDetail(models.Model):
     option4 = models.TextField()
     correctAnswer = models.TextField()
 
+
 class scores(models.Model):
     user = models.TextField()
     score = models.IntegerField()
     examCode = models.TextField()
+
 
 class timeManager(models.Model):
     user = models.TextField()
